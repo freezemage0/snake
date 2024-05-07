@@ -27,9 +27,9 @@ export class Engine {
         this.renderField(context);
 
         this.snake = new Snake(context, Direction.right());
-        this.snake.addSegment(this.snake.createSegment());
-        this.snake.addSegment(this.snake.createSegment());
-        this.snake.addSegment(this.snake.createSegment());
+        for (let i = 0; i < 3; i += 1) {
+            this.snake.addSegment(this.snake.createSegment());
+        }
     }
 
     run() {
@@ -38,9 +38,10 @@ export class Engine {
     }
 
     update(event) {
-        const currentDirection = this.snake.direction;
+        const currentDirection = this.inputQueue.at(-1) || this.snake.direction;
 
         let direction;
+
         switch (event.key.toLowerCase()) {
             case 'w':
             case 'ц':

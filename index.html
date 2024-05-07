@@ -49,9 +49,11 @@
             button.onclick = (event) => {
                 event.preventDefault();
 
-                const speed = document.querySelector('input[name="speed"]');
+                engine.stop();
 
+                const speed = document.querySelector('input[name="speed"]');
                 engine.speed = speed.value;
+
                 engine.initialize();
                 engine.run();
             }

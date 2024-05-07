@@ -38,6 +38,11 @@ export class Engine {
         this.tickerId = setInterval(this.tick.bind(this), 1000 / this.speed);
     }
 
+    stop() {
+        window.removeEventListener('keydown', this.update.bind(this));
+        clearInterval(this.tickerId);
+    }
+
     update(event) {
         const currentDirection = this.inputQueue.at(-1) || this.snake.direction;
 

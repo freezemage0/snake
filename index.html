@@ -20,7 +20,13 @@
         </style>
     </head>
     <body>
+
         <canvas id="application"></canvas>
+        <label>
+            <span>Speed</span>
+            <input type="range" min="1" max="10" value="8" name="speed">
+        </label>
+        <button class="btn">Start</button>
         <div class="container">
             <div class="score">
                 <span class="score__text">Score:</span>
@@ -37,9 +43,18 @@
             const score = document.querySelector('.score__value');
             const highScore = document.querySelector('.high-score');
 
+            const button = document.querySelector('.btn');
             const engine = new Freezemage.Engine(canvas, score, highScore);
-            engine.initialize();
-            engine.run();
+
+            button.onclick = (event) => {
+                event.preventDefault();
+
+                const speed = document.querySelector('input[name="speed"]');
+
+                engine.speed = speed.value;
+                engine.initialize();
+                engine.run();
+            }
         </script>
     </body>
 </html>

@@ -7,10 +7,11 @@ export class Engine {
     fruit = null;
     inputQueue = [];
 
-    constructor(canvas, score, highScore) {
+    constructor(canvas, score, highScore, speed) {
         this.canvas = canvas;
         this.score = score;
         this.highScore = highScore;
+        this.speed = speed || 8;
     }
 
     initialize() {
@@ -34,7 +35,7 @@ export class Engine {
 
     run() {
         window.addEventListener('keydown', this.update.bind(this));
-        this.tickerId = setInterval(this.tick.bind(this), 1000 / 8);
+        this.tickerId = setInterval(this.tick.bind(this), 1000 / this.speed);
     }
 
     update(event) {

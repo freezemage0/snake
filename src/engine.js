@@ -14,6 +14,8 @@ export class Engine {
     }
 
     initialize() {
+        window.focus();
+
         this.scoreValue = 0;
         this.updateScore();
         this.fruit = null;

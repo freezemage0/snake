@@ -3,20 +3,41 @@
     <head>
         <meta charset="UTF-8">
         <title>Snake</title>
+        <style>
+            .container {
+                display: flex;
+                text-align: left;
+                width: 300px;
+            }
+
+            .score {
+                flex: 1;
+            }
+
+            .high-score {
+                flex: 2;
+            }
+        </style>
     </head>
     <body>
         <canvas id="application"></canvas>
-        <div class="high-score">
-            <span class="high-score__text">Score:</span>
-            <span class="high-score__value">0</span>
+        <div class="container">
+            <div class="score">
+                <span class="score__text">Score:</span>
+                <span class="score__value">0</span>
+            </div>
+            <div class="high-score">
+                <div class="high-score__title">Attempts</div>
+            </div>
         </div>
         <script type="module">
             import {Freezemage} from "./src/index.js";
 
             const canvas = document.getElementById('application');
-            const score = document.querySelector('.high-score__value');
+            const score = document.querySelector('.score__value');
+            const highScore = document.querySelector('.high-score');
 
-            const engine = new Freezemage.Engine(canvas, score);
+            const engine = new Freezemage.Engine(canvas, score, highScore);
             engine.initialize();
             engine.run();
         </script>

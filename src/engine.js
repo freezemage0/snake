@@ -6,9 +6,10 @@ import {Coordinate} from "./coordinate.js";
 export class Engine {
     fruit = null;
 
-    constructor(canvas, score) {
+    constructor(canvas, score, highScore) {
         this.canvas = canvas;
         this.score = score;
+        this.highScore = highScore;
     }
 
     initialize() {
@@ -70,6 +71,12 @@ export class Engine {
 
         if (this.checkCollision()) {
             alert('Game Over');
+
+            const highScoreEntry = document.createElement('div');
+            highScoreEntry.classList.add('high-score__entry');
+            highScoreEntry.innerHTML = (new Date()).toLocaleString() + ': ' + this.scoreValue;
+
+            this.highScore.appendChild(highScoreEntry);
 
             this.initialize();
         }

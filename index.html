@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Snake</title>
+    </head>
+    <body>
+        <canvas id="application"></canvas>
+        <div class="high-score">
+            <span class="high-score__text">Score:</span>
+            <span class="high-score__value">0</span>
+        </div>
+        <script type="module">
+            import {Freezemage} from "./src/index.js";
+
+            const canvas = document.getElementById('application');
+            const score = document.querySelector('.high-score__value');
+
+            const engine = new Freezemage.Engine(canvas, score);
+            engine.initialize();
+            engine.run();
+        </script>
+    </body>
+</html>

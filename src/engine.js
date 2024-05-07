@@ -75,13 +75,18 @@ export class Engine {
         this.snake.update();
 
         if (this.checkCollision()) {
-            alert('Game Over');
+            const retry = confirm('Game Over. Retry?');
 
             const highScoreEntry = document.createElement('div');
             highScoreEntry.classList.add('high-score__entry');
             highScoreEntry.innerHTML = (new Date()).toLocaleString() + ': ' + this.scoreValue;
 
             this.highScore.appendChild(highScoreEntry);
+
+            if (!retry) {
+                clearInterval(this.tickerId);
+                return;
+            }
 
             this.initialize();
         }

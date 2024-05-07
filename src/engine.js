@@ -9,11 +9,15 @@ export class Engine {
     constructor(canvas, score) {
         this.canvas = canvas;
         this.score = score;
-        this.scoreValue = 0;
     }
 
     initialize() {
+        this.scoreValue = 0;
+        this.updateScore();
+        this.fruit = null;
+
         const context = this.canvas.getContext('2d');
+        context.reset();
 
         this.context = context;
         this.renderField(context);
@@ -65,10 +69,9 @@ export class Engine {
         this.snake.update();
 
         if (this.checkCollision()) {
-            clearInterval(this.tickerId);
             alert('Game Over');
 
-            return;
+            this.initialize();
         }
 
         if (!this.fruit) {

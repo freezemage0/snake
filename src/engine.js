@@ -5,6 +5,7 @@ import {Coordinate} from "./coordinate.js";
 
 export class Engine {
     fruit = null;
+    inputQueue = [];
 
     constructor(canvas, score, highScore) {
         this.canvas = canvas;
@@ -63,10 +64,14 @@ export class Engine {
             return;
         }
 
-        this.snake.direction = direction;
+        this.inputQueue.push(direction);
     }
 
     tick() {
+        if (this.inputQueue.length > 0) {
+            this.snake.direction = this.inputQueue.shift();
+        }
+
         this.snake.update();
 
         if (this.checkCollision()) {

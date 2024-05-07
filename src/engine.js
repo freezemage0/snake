@@ -34,7 +34,7 @@ export class Engine {
 
     run() {
         window.addEventListener('keydown', this.update.bind(this));
-        this.tickerId = setInterval(this.tick.bind(this), 1000 / 10);
+        this.tickerId = setInterval(this.tick.bind(this), 1000 / 8);
     }
 
     update(event) {

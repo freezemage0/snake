@@ -1,8 +1,9 @@
 export class Localization {
-    /**
-     * @param {Map<string, Map<string, string>>} dictionary
-     */
-    constructor(dictionary) {
+    private locale: Intl.Locale;
+    private dateFormatter: Intl.DateTimeFormat;
+    private dictionary: Map<string, Map<string, string>>;
+
+    constructor(dictionary: Map<string, Map<string, string>>) {
         this.locale = new Intl.Locale(navigator.language);
         this.dateFormatter = new Intl.DateTimeFormat(
                 this.locale.maximize().language,
@@ -14,7 +15,7 @@ export class Localization {
         this.dictionary = dictionary;
     }
 
-    getMessage(code) {
+    getMessage(code: string) {
         const info = this.locale.maximize();
 
         if (!this.dictionary.has(info.language)) {
@@ -29,7 +30,7 @@ export class Localization {
         return locales.get(code);
     }
 
-    formatDate(date) {
+    formatDate(date: Date) {
         return this.dateFormatter.format(date);
     }
 }

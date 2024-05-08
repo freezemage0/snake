@@ -1,21 +1,26 @@
 import {Coordinate} from "./coordinate.js";
+import {Direction} from "./direction";
+import {Colors} from "./colors";
 
 export class Snake {
-    lastSegment;
+    public direction: Direction;
+    private readonly context: CanvasRenderingContext2D;
+    public segments: Array<Segment>
+    public lastSegment: Segment | null;
 
-    constructor(context, direction) {
+    constructor(context: CanvasRenderingContext2D, direction: Direction) {
         this.context = context;
         this.direction = direction;
         this.segments = [];
     }
 
-    update() {
+    update(): void {
         this.segments.forEach((segment) => {
             segment.clear();
         });
 
-        let trail = null;
-        let previousTrail = null;
+        let trail: Coordinate = null;
+        let previousTrail: Coordinate = null;
         this.segments.forEach((segment) => {
             if (trail !== null) {
                 trail = segment.position;
@@ -31,36 +36,46 @@ export class Snake {
         });
     }
 
-    createSegment(color) {
-        let position;
+    createSegment(color: string): Segment {
+        let position: Coordinate;
         if (this.lastSegment) {
             position = this.lastSegment.position.move(this.direction.reverse());
         } else {
-            position = new Coordinate(300/2, 150/2);
+            position = new Coordinate(300 / 2, 150 / 2);
         }
 
-        return new Segment(this.context, position, 13, color || 'orange');
+        return new Segment(this.context, position, 13, color || Colors.SNAKE_BODY);
     }
 
-    addSegment(segment) {
+    addSegment(segment: Segment) {
         this.segments.push(segment);
         this.lastSegment = segment;
     }
 }
 
 class Segment {
-    constructor(context, position, size, color) {
+    private context: CanvasRenderingContext2D;
+    public position: Coordinate;
+    private readonly size: number;
+    private readonly color: string;
+
+    constructor(
+            context: CanvasRenderingContext2D,
+            position: Coordinate,
+            size: number,
+            color: string
+    ) {
         this.context = context;
         this.position = position;
         this.size = size;
         this.color = color;
     }
 
-    move(position) {
+    move(position: Coordinate): void {
         this.position = position;
     }
 
-    clear() {
+    clear(): void {
         this.context.fillStyle = 'white';
         this.context.fillRect(
                 this.position.x + 1,
@@ -70,7 +85,7 @@ class Segment {
         );
     }
 
-    render() {
+    render(): void {
         this.context.fillStyle = this.color;
         this.context.fillRect(
                 this.position.x + 1,

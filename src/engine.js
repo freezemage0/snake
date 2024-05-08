@@ -2,16 +2,18 @@ import {Snake} from "./snake.js";
 import {Direction} from "./direction.js";
 import {Fruit} from "./fruit.js";
 import {Coordinate} from "./coordinate.js";
+import {Colors} from "./colors.js";
 
 export class Engine {
     fruit = null;
     inputQueue = [];
 
-    constructor(canvas, score, highScore, speed) {
+    constructor(canvas, score, highScore, speed, localization) {
         this.canvas = canvas;
         this.score = score;
         this.highScore = highScore;
         this.speed = speed || 8;
+        this.localization = localization;
     }
 
     initialize() {
@@ -28,8 +30,9 @@ export class Engine {
         this.renderField(context);
 
         this.snake = new Snake(context, Direction.right());
-        for (let i = 0; i < 3; i += 1) {
-            this.snake.addSegment(this.snake.createSegment());
+        this.snake.addSegment(this.snake.createSegment(Colors.SNAKE_HEAD));
+        for (let i = 0; i < 2; i += 1) {
+            this.snake.addSegment(this.snake.createSegment(Colors.SNAKE_BODY));
         }
     }
 
@@ -86,9 +89,15 @@ export class Engine {
         if (this.checkCollision()) {
             const retry = confirm('Game Over. Retry?');
 
-            const highScoreEntry = document.createElement('div');
-            highScoreEntry.classList.add('high-score__entry');
-            highScoreEntry.innerHTML = (new Date()).toLocaleString() + ': ' + this.scoreValue;
+            const highScoreEntry = document.createElement('tr');
+            const highScoreDate = document.createElement('td');
+            highScoreDate.innerHTML = this.localization.formatDate(new Date());
+
+            const highScoreValue = document.createElement('td');
+            highScoreValue.innerHTML = this.scoreValue;
+
+            highScoreEntry.appendChild(highScoreDate);
+            highScoreEntry.appendChild(highScoreValue);
 
             this.highScore.appendChild(highScoreEntry);
 
@@ -109,12 +118,12 @@ export class Engine {
                 );
             } while (this.snake.segments.some((segment) => randomPosition.equals(segment.position)));
 
-            this.fruit = new Fruit(this.context, randomPosition);
+            this.fruit = new Fruit(this.context, randomPosition, Colors.FRUIT);
             this.fruit.render();
         }
 
         if (this.snake.segments.some((segment) => this.fruit.collidesWith(segment.position))) {
-            this.snake.addSegment(this.snake.createSegment());
+            this.snake.addSegment(this.snake.createSegment(Colors.SNAKE_BODY));
             this.scoreValue += 1;
             this.updateScore();
             this.fruit = null;

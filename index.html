@@ -4,47 +4,173 @@
         <meta charset="UTF-8">
         <title>Snake</title>
         <style>
+            body {
+                font-size: 18px;
+                background-color: #3E3E42;
+            }
+
             .container {
                 display: flex;
                 text-align: left;
-                width: 300px;
+                vertical-align: center;
+                align-content: center;
             }
 
-            .score {
+            .col {
+                display: flex;
+                flex-direction: column;
                 flex: 1;
             }
 
+            .col.col-center {
+                align-items: center;
+            }
+
+            .row {
+                border-radius: 1em;
+                margin-bottom: 1em;
+                padding: 0.75em;
+                background-color: white;
+            }
+
+            .control-buttons {
+                display: flex;
+            }
+
+            .control-buttons div {
+                flex: 0;
+            }
+
+            .control-buttons .left-button,
+            .control-buttons .right-button {
+                background-color: grey;
+                border: none;
+                margin-left: 0.25em;
+                margin-right: 0.25em;
+                height: 100%;
+            }
+
+            .control-buttons .up-button,
+            .control-buttons .down-button {
+                background-color: grey;
+                border: none;
+                width: 4em;
+                height: auto;
+            }
+
+            .control.control-buttons .up-button {
+                margin-bottom: 0.125em;
+            }
+
+            .title {
+                font-size: 2em;
+                text-align: center;
+            }
+
             .high-score {
-                flex: 2;
+                border-radius: 1em;
+                border-collapse: collapse;
+                border: 1px solid grey;
+                width: 100%;
+            }
+
+            .high-score td {
+                border: 1px solid grey;
+                padding: 0.25em;
+            }
+
+            .settings .btn {
+                width: 100%;
+                height: 2em;
+                font-size: 1.5em;
+                text-transform: uppercase;
+                background-color: darkseagreen;
+                border-radius: 0.25em;
+                border: none;
+            }
+
+            .settings .setting {
+                margin-bottom: 0.5em;
             }
         </style>
     </head>
     <body>
-
-        <canvas id="application"></canvas>
-        <label>
-            <span>Speed</span>
-            <input type="range" min="1" max="10" value="8" name="speed">
-        </label>
-        <button class="btn">Start</button>
-        <div class="container">
-            <div class="score">
-                <span class="score__text">Score:</span>
-                <span class="score__value">0</span>
+        <div class="container" style="display: none">
+            <div class="col">
+                <div class="row">
+                    <div class="title" data-localized>{{ATTEMPTS}}</div>
+                </div>
+                <div class="row">
+                    <table class="high-score">
+                        <tbody>
+                            <tr>
+                                <td data-localized>{{DATE}}</td>
+                                <td data-localized>{{SCORE}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="high-score">
-                <div class="high-score__title">Attempts</div>
+            <div class="snake col col-center">
+                <div class="row">
+                    <span class="score__text" data-localized>{{SCORE}}:</span>
+                    <span class="score__value">0</span>
+                </div>
+                <div class="row">
+                    <canvas id="application"></canvas>
+                </div>
+                <div class="row">
+                    <div class="control-buttons">
+                        <div>
+                            <button class="left-button">Left</button>
+                        </div>
+                        <div>
+                            <button class="up-button">Up</button>
+                            <button class="down-button">Down</button>
+                        </div>
+                        <div>
+                            <button class="right-button">Right</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="settings col">
+                <div class="row">
+                    <div class="title" data-localized="">{{SETTINGS}}</div>
+                </div>
+                <div class="row">
+                    <div class="setting">
+                        <label>
+                            <span data-localized="">{{SPEED}}</span>
+                            <input type="range" min="1" max="10" value="8" name="speed">
+                        </label>
+                    </div>
+                    <div class="setting">
+                        <div>
+                            <button class="btn" data-localized>{{START}}</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <script type="module">
             import {Freezemage} from "./src/index.js";
 
+            const localization = new Freezemage.Localization(Freezemage.Messages);
+            document.querySelectorAll('[data-localized]').forEach((node) => {
+                node.innerHTML = node.innerHTML.replace(
+                    /\{\{(.*)}}/,
+                    (matches, p1) => localization.getMessage(p1)
+                );
+            });
+            document.querySelector('.container').style.display = null;
+
             const canvas = document.getElementById('application');
             const score = document.querySelector('.score__value');
-            const highScore = document.querySelector('.high-score');
+            const highScore = document.querySelector('.high-score tbody');
 
             const button = document.querySelector('.btn');
-            const engine = new Freezemage.Engine(canvas, score, highScore);
+            const engine = new Freezemage.Engine(canvas, score, highScore, null, localization);
 
             button.onclick = (event) => {
                 event.preventDefault();

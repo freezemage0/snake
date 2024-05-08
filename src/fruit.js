@@ -1,11 +1,12 @@
 export class Fruit {
-    constructor(context, position) {
+    constructor(context, position, color) {
         this.context = context;
         this.position = position;
+        this.color = color;
     }
 
     render() {
-        this.context.fillStyle = 'green';
+        this.context.fillStyle = this.color;
         this.context.fillRect(
                 this.position.x + 1,
                 this.position.y + 1,

@@ -31,7 +31,7 @@ export class Snake {
         });
     }
 
-    createSegment() {
+    createSegment(color) {
         let position;
         if (this.lastSegment) {
             position = this.lastSegment.position.move(this.direction.reverse());
@@ -39,7 +39,7 @@ export class Snake {
             position = new Coordinate(300/2, 150/2);
         }
 
-        return new Segment(this.context, position, 13);
+        return new Segment(this.context, position, 13, color || 'orange');
     }
 
     addSegment(segment) {
@@ -49,10 +49,11 @@ export class Snake {
 }
 
 class Segment {
-    constructor(context, position, size) {
+    constructor(context, position, size, color) {
         this.context = context;
         this.position = position;
         this.size = size;
+        this.color = color;
     }
 
     move(position) {
@@ -70,7 +71,7 @@ class Segment {
     }
 
     render() {
-        this.context.fillStyle = 'red';
+        this.context.fillStyle = this.color;
         this.context.fillRect(
                 this.position.x + 1,
                 this.position.y + 1,

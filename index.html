@@ -153,14 +153,16 @@
                 </div>
             </div>
         </div>
-        <script type="module">
-            import {Freezemage} from "./src/index.js";
-
+        <script src="dist/bundle.js"></script>
+        <script type="text/javascript">
+            /**
+             * @namespace Freezemage
+             */
             const localization = new Freezemage.Localization(Freezemage.Messages);
             document.querySelectorAll('[data-localized]').forEach((node) => {
                 node.innerHTML = node.innerHTML.replace(
-                    /\{\{(.*)}}/,
-                    (matches, p1) => localization.getMessage(p1)
+                        /\{\{(.*)}}/,
+                        (matches, p1) => localization.getMessage(p1)
                 );
             });
             document.querySelector('.container').style.display = null;
@@ -170,17 +172,16 @@
             const highScore = document.querySelector('.high-score tbody');
 
             const button = document.querySelector('.btn');
-            const engine = new Freezemage.Engine(canvas, score, highScore, null, localization);
+            const engine = new Freezemage.Engine(canvas, score, highScore, localization);
 
             button.onclick = (event) => {
                 event.preventDefault();
 
                 engine.stop();
 
-                const speed = document.querySelector('input[name="speed"]');
-                engine.speed = speed.value;
+                const speed = document.querySelector('input[name="speed"]').value;
 
-                engine.initialize();
+                engine.initialize(speed);
                 engine.run();
             }
         </script>

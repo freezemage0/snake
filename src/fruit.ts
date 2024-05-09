@@ -1,12 +1,17 @@
+import {Coordinate} from "./coordinate";
+import {Colors} from "./colors";
+
 export class Fruit {
-    constructor(context, position, color) {
+    private context: CanvasRenderingContext2D;
+    private position: Coordinate;
+
+    constructor(context: CanvasRenderingContext2D, position: Coordinate) {
         this.context = context;
         this.position = position;
-        this.color = color;
     }
 
     render() {
-        this.context.fillStyle = this.color;
+        this.context.fillStyle = Colors.FRUIT;
         this.context.fillRect(
                 this.position.x + 1,
                 this.position.y + 1,
@@ -25,7 +30,7 @@ export class Fruit {
         );
     }
 
-    collidesWith(position) {
+    collidesWith(position: Coordinate): boolean {
         return this.position.equals(position);
     }
 }

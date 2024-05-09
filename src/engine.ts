@@ -1,55 +1,74 @@
-import {Snake} from "./snake.js";
-import {Direction} from "./direction.js";
-import {Fruit} from "./fruit.js";
-import {Coordinate} from "./coordinate.js";
-import {Colors} from "./colors.js";
+import {Snake} from "./snake";
+import {Direction} from "./direction";
+import {Fruit} from "./fruit";
+import {Coordinate} from "./coordinate";
+import {Colors} from "./colors";
+import {Localization} from "./localization";
+import {Score} from "./score";
 
 export class Engine {
-    fruit = null;
-    inputQueue = [];
+    private fruit: Fruit|null = null;
+    private readonly context: CanvasRenderingContext2D;
+    private readonly score: Score;
+    private highScore: HTMLElement;
+    private speed: number = 8;
+    private localization: Localization;
+    private readonly snake: Snake;
+    private tickerId: number|undefined;
 
-    constructor(canvas, score, highScore, speed, localization) {
-        this.canvas = canvas;
-        this.score = score;
-        this.highScore = highScore;
-        this.speed = speed || 8;
-        this.localization = localization;
-    }
+    private inputQueue: Array<Direction> = [];
 
-    initialize() {
-        window.focus();
-
-        this.scoreValue = 0;
-        this.updateScore();
-        this.fruit = null;
-
-        const context = this.canvas.getContext('2d');
-        context.reset();
+    public constructor(
+            canvas: HTMLCanvasElement,
+            score: HTMLElement,
+            highScore: HTMLElement,
+            localization: Localization
+    ) {
+        const context = canvas.getContext('2d');
+        if (!context) {
+            throw new Error('Failed to acquire canvas context.');
+        }
 
         this.context = context;
-        this.renderField(context);
+        this.highScore = highScore;
+        this.localization = localization;
 
-        this.snake = new Snake(context, Direction.right());
+        this.snake = new Snake(this.context, Direction.right());
+        this.score = new Score(score, 0);
+    }
+
+    public initialize(speed: number): void {
+        window.focus();
+
+        this.speed = speed;
+        this.fruit = null;
+
+        this.context.reset();
+        this.score.reset();
+
+        this.snake.resetSegments();
         this.snake.addSegment(this.snake.createSegment(Colors.SNAKE_HEAD));
         for (let i = 0; i < 2; i += 1) {
             this.snake.addSegment(this.snake.createSegment(Colors.SNAKE_BODY));
         }
+
+        this.renderField();
     }
 
-    run() {
+    public run() {
         window.addEventListener('keydown', this.update.bind(this));
-        this.tickerId = setInterval(this.tick.bind(this), 1000 / this.speed);
+        this.tickerId = window.setInterval(this.tick.bind(this), 1000 / this.speed);
     }
 
-    stop() {
+    public stop() {
         window.removeEventListener('keydown', this.update.bind(this));
-        clearInterval(this.tickerId);
+        window.clearInterval(this.tickerId);
     }
 
-    update(event) {
+    private update(event: KeyboardEvent): void {
         const currentDirection = this.inputQueue.at(-1) || this.snake.direction;
 
-        let direction;
+        let direction: Direction;
 
         switch (event.key.toLowerCase()) {
             case 'w':
@@ -79,9 +98,12 @@ export class Engine {
         this.inputQueue.push(direction);
     }
 
-    tick() {
+    private tick(): void {
         if (this.inputQueue.length > 0) {
-            this.snake.direction = this.inputQueue.shift();
+            const direction = this.inputQueue.shift();
+            if (direction) {
+                this.snake.direction = direction;
+            }
         }
 
         this.snake.update();
@@ -94,7 +116,7 @@ export class Engine {
             highScoreDate.innerHTML = this.localization.formatDate(new Date());
 
             const highScoreValue = document.createElement('td');
-            highScoreValue.innerHTML = this.scoreValue;
+            highScoreValue.innerHTML = this.score.getValue().toString();
 
             highScoreEntry.appendChild(highScoreDate);
             highScoreEntry.appendChild(highScoreValue);
@@ -102,36 +124,36 @@ export class Engine {
             this.highScore.appendChild(highScoreEntry);
 
             if (!retry) {
-                clearInterval(this.tickerId);
+                window.clearInterval(this.tickerId);
                 return;
             }
 
-            this.initialize();
+            this.initialize(this.speed);
         }
 
         if (!this.fruit) {
-            let randomPosition;
+            let randomPosition: Coordinate;
             do {
-                 randomPosition = new Coordinate(
+                randomPosition = new Coordinate(
                         Math.max(Math.round(Math.random() * 19) * 15, 15),
                         Math.max(Math.round(Math.random() * 9) * 15, 15),
                 );
             } while (this.snake.segments.some((segment) => randomPosition.equals(segment.position)));
 
-            this.fruit = new Fruit(this.context, randomPosition, Colors.FRUIT);
+            this.fruit = new Fruit(this.context, randomPosition);
             this.fruit.render();
         }
 
-        if (this.snake.segments.some((segment) => this.fruit.collidesWith(segment.position))) {
+        if (this.snake.segments.some((segment): boolean => !!this.fruit?.collidesWith(segment.position))) {
             this.snake.addSegment(this.snake.createSegment(Colors.SNAKE_BODY));
-            this.scoreValue += 1;
-            this.updateScore();
+            this.score.increment();
+
             this.fruit = null;
         }
     }
 
-    checkCollision() {
-        return this.snake.segments.some((segment) => {
+    private checkCollision(): boolean {
+        return this.snake.segments.some((segment): boolean => {
             if (segment.position.x < 0 || segment.position.x >= 300) {
                 return true;
             }
@@ -139,33 +161,25 @@ export class Engine {
                 return true;
             }
 
-            return this.snake.segments.some((other) => {
-                return (
-                        segment !== other &&
-                        segment.position.x === other.position.x &&
-                        segment.position.y === other.position.y
-                );
-            });
-        })
+            return this.snake.segments.some((other): boolean => (
+                segment !== other && segment.position === other.position
+            ));
+        });
     }
 
-    renderField(context) {
-        context.beginPath();
+    private renderField(): void {
+        this.context.beginPath();
 
         for (let x = 0; x <= 300; x += 15) {
-            context.moveTo(x, 0);
-            context.lineTo(x, 150);
-            context.stroke();
+            this.context.moveTo(x, 0);
+            this.context.lineTo(x, 150);
+            this.context.stroke();
         }
 
         for (let y = 0; y <= 150; y += 15) {
-            context.moveTo(0, y);
-            context.lineTo(300, y);
-            context.stroke();
+            this.context.moveTo(0, y);
+            this.context.lineTo(300, y);
+            this.context.stroke();
         }
-    }
-
-    updateScore() {
-        this.score.innerHTML = this.scoreValue;
     }
 }

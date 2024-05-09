@@ -1,5 +1,5 @@
-import {Engine} from './engine.js';
-import {Localization, Messages} from "./localization.js";
+import {Engine} from './engine';
+import {Localization, Messages} from "./localization";
 
 export const Freezemage = {
     Engine,

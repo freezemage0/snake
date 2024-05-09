@@ -1,17 +1,16 @@
-import {Coordinate} from "./coordinate.js";
+import {Coordinate} from "./coordinate";
 import {Direction} from "./direction";
 import {Colors} from "./colors";
 
 export class Snake {
     public direction: Direction;
     private readonly context: CanvasRenderingContext2D;
-    public segments: Array<Segment>
-    public lastSegment: Segment | null;
+    public segments: Array<Segment> = [];
+    public lastSegment: Segment | null = null;
 
     constructor(context: CanvasRenderingContext2D, direction: Direction) {
         this.context = context;
         this.direction = direction;
-        this.segments = [];
     }
 
     update(): void {
@@ -19,10 +18,10 @@ export class Snake {
             segment.clear();
         });
 
-        let trail: Coordinate = null;
-        let previousTrail: Coordinate = null;
+        let trail: Coordinate;
+        let previousTrail: Coordinate;
         this.segments.forEach((segment) => {
-            if (trail !== null) {
+            if (!!trail) {
                 trail = segment.position;
                 segment.move(previousTrail);
                 previousTrail = trail;
@@ -50,6 +49,11 @@ export class Snake {
     addSegment(segment: Segment) {
         this.segments.push(segment);
         this.lastSegment = segment;
+    }
+
+    resetSegments(): void {
+        this.segments = [];
+        this.lastSegment = null;
     }
 }
 

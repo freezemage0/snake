@@ -23,7 +23,7 @@ export class Localization {
         }
 
         const locales = this.dictionary.get(info.language);
-        if (!locales.has(code)) {
+        if (!locales || !locales.has(code)) {
             return code;
         }
 

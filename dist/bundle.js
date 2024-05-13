@@ -519,9 +519,9 @@ var KeyboardControlMap = /** @class */ (function () {
     return KeyboardControlMap;
 }());
 
-;// CONCATENATED MODULE: ./asset/l12n/messages.json
+;// CONCATENATED MODULE: ./asset/l10n/messages.json
 const messages_namespaceObject = /*#__PURE__*/JSON.parse('{"en":{"SCORE":"Score","SPEED":"Speed","ATTEMPTS":"Attempts","SETTINGS":"Settings","START":"New Game","DATE":"Date","SNAKE":"Snake","SCALE":"Scale","HEAD_COLOR":"Snake\'s head color","BODY_COLOR":"Snake\'s body color","FRUIT_COLOR":"Fruit color","BORDER_COLOR":"Border color","GAME_OVER":"Game Over. Retry?","VICTORY":"You won! Play again?","RESET":"Reset"},"ru":{"SCORE":"Очки","SPEED":"Скорость","ATTEMPTS":"Попытки","SETTINGS":"Настройки","START":"Новая Игра","DATE":"Дата","SNAKE":"Змейка","SCALE":"Размер","HEAD_COLOR":"Цвет головы змейки","BODY_COLOR":"Цвет тела змейки","FRUIT_COLOR":"Цвет фрукта","BORDER_COLOR":"Цвет границ","GAME_OVER":"Игра окончена. Попробовать ещё раз?","VICTORY":"Вы победили! Сыграть ещё раз?","RESET":"Сбросить"}}');
-var l12n_messages_namespaceObject = /*#__PURE__*/__webpack_require__.t(messages_namespaceObject, 2);
+var l10n_messages_namespaceObject = /*#__PURE__*/__webpack_require__.t(messages_namespaceObject, 2);
 ;// CONCATENATED MODULE: ./src/localization.ts
 
 var Localization = /** @class */ (function () {
@@ -532,7 +532,7 @@ var Localization = /** @class */ (function () {
             timeStyle: 'medium',
         });
         var dictionary = new Map();
-        Object.entries(l12n_messages_namespaceObject).forEach(function (entry) {
+        Object.entries(l10n_messages_namespaceObject).forEach(function (entry) {
             var language = entry[0], languageMessages = entry[1];
             var map = new Map();
             Object.entries(languageMessages).forEach(function (entry) {

@@ -1,4 +1,4 @@
-import * as messages from '../asset/l12n/messages.json';
+import * as messages from '../asset/l10n/messages.json';
 
 export class Localization {
     private static readonly DEFAULT_LANGUAGE: string = 'en';

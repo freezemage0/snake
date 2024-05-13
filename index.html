@@ -2,23 +2,125 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Snake</title>
+        <title data-localized>{{SNAKE}}</title>
+        <link rel="stylesheet" href="dist/styles.css"/>
     </head>
-    <body>
-        <canvas id="application"></canvas>
-        <div class="high-score">
-            <span class="high-score__text">Score:</span>
-            <span class="high-score__value">0</span>
+    <body class="bg-cyan-950 font-body">
+        <div class="container hidden justify-between py-4">
+            <div class="flex-col flex-auto p-1 px-2.5">
+                <div class="bg-white p-5 px-4 rounded mb-4 flex justify-between items-stretch">
+                    <span class="text-3xl" data-localized>{{ATTEMPTS}}</span>
+                    <button class="border-0 bg-red-500 rounded text-xs p-2 uppercase text-white" id="reset" data-localized>{{RESET}}</button>
+                </div>
+                <div class="bg-white p-5 rounded flex justify-between">
+                    <table class="rounded border-collapse border-solid border border-gray-700 w-full">
+                        <tbody data-role="score-board">
+                            <tr>
+                                <td class="border border-solid border-black p-1 px-3" data-localized>{{DATE}}</td>
+                                <td class="border border-solid border-black p-1 text-right px-3" data-localized>{{SCORE}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="flex-auto p-1 flex-col">
+                <div class="bg-white p-5 rounded mb-4 text-center">
+                    <div class="text-3xl" data-localized>{{SNAKE}}</div>
+                </div>
+                <div class="bg-white p-5 rounded mb-4">
+                    <span data-localized>{{SCORE}}:</span>
+                    <span data-role="score-counter">0</span>
+                </div>
+                <div class="bg-white p-3 rounded mb-4 flex justify-between">
+                    <canvas id="application" class="m-auto" style="height: 300px; width: 600px;"></canvas>
+                </div>
+            </div>
+            <div class="flex-auto p-1 flex-col px-2.5 text-center">
+                <div class="bg-white p-5 rounded mb-4">
+                    <div class="text-3xl" data-localized>{{SETTINGS}}</div>
+                </div>
+                <div class="bg-white p-5 rounded pb-0">
+                    <form onsubmit="return false;" name="settings">
+                        <fieldset>
+                            <div class="flex justify-between mb-4">
+                                <label for="head_color">
+                                    <span data-localized>{{HEAD_COLOR}}</span>
+                                </label>
+                                <input type="color" name="head_color" id="head_color" value="#ff0000">
+                            </div>
+                            <div class="flex justify-between mb-4">
+                                <label for="body_color">
+                                    <span data-localized>{{BODY_COLOR}}</span>
+                                </label>
+                                <input type="color" name="body_color" id="body_color" value="#ffa500">
+                            </div>
+                            <div class="flex justify-between mb-4">
+                                <label for="fruit_color">
+                                    <span data-localized>{{FRUIT_COLOR}}</span>
+                                </label>
+                                <input type="color" name="fruit_color" id="fruit_color" value="#008000">
+                            </div>
+                            <div class="flex justify-between mb-4">
+                                <label for="border_color">
+                                    <span data-localized>{{BORDER_COLOR}}</span>
+                                </label>
+                                <input type="color" name="border_color" id="border_color" value="#3E3E42">
+                            </div>
+                            <div class="flex justify-between mb-6">
+                                <label for="speed">
+                                    <span data-localized>{{SPEED}} (1 - 10)</span>
+                                </label>
+                                <input type="range" min="1" max="10" value="8" name="speed" id="speed">
+                            </div>
+                            <div class="mb-4">
+                                <button class="border-0 bg-sky-300 rounded p-4 uppercase" id="start" data-localized>{{START}}</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
         </div>
-        <script type="module">
-            import {Freezemage} from "./src/index.js";
+        <script src="dist/bundle.js"></script>
+        <script type="text/javascript">
+            /**
+             * @namespace Freezemage
+             */
+            const localization = new Freezemage.Localization();
+            localization.initialize('[data-localized]').then(() => {
+                const container = document.querySelector('.container');
+                container.classList.remove('hidden');
+                container.classList.add('flex');
+            });
 
-            const canvas = document.getElementById('application');
-            const score = document.querySelector('.high-score__value');
+            const form = document.forms.namedItem('settings');
 
-            const engine = new Freezemage.Engine(canvas, score);
-            engine.initialize();
-            engine.run();
+            const history = new Freezemage.History(
+                    document.querySelector('[data-role="score-board"]'),
+                    localization
+            );
+            history.render();
+
+            const engine = new Freezemage.Engine(
+                    document.getElementById('application'),
+                    document.querySelector('[data-role="score-counter"]'),
+                    localization,
+                    Freezemage.Settings.createFromNode(form),
+                    history
+            );
+
+            document.getElementById('start').onclick = (event) => {
+                event.preventDefault();
+
+                engine.stop();
+                engine.initialize(Freezemage.Settings.createFromNode(form));
+                engine.run();
+            }
+
+            document.getElementById('reset').onclick = (event) => {
+                event.preventDefault();
+
+                history.reset();
+            }
         </script>
     </body>
 </html>

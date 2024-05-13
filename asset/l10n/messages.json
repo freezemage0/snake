@@ -1,0 +1,36 @@
+{
+    "en": {
+        "SCORE": "Score",
+        "SPEED": "Speed",
+        "ATTEMPTS": "Attempts",
+        "SETTINGS": "Settings",
+        "START": "New Game",
+        "DATE": "Date",
+        "SNAKE": "Snake",
+        "SCALE": "Scale",
+        "HEAD_COLOR": "Snake's head color",
+        "BODY_COLOR": "Snake's body color",
+        "FRUIT_COLOR": "Fruit color",
+        "BORDER_COLOR": "Border color",
+        "GAME_OVER": "Game Over. Retry?",
+        "VICTORY": "You won! Play again?",
+        "RESET": "Reset"
+    },
+    "ru": {
+        "SCORE": "Очки",
+        "SPEED": "Скорость",
+        "ATTEMPTS": "Попытки",
+        "SETTINGS": "Настройки",
+        "START": "Новая Игра",
+        "DATE": "Дата",
+        "SNAKE": "Змейка",
+        "SCALE": "Размер",
+        "HEAD_COLOR": "Цвет головы змейки",
+        "BODY_COLOR": "Цвет тела змейки",
+        "FRUIT_COLOR": "Цвет фрукта",
+        "BORDER_COLOR": "Цвет границ",
+        "GAME_OVER": "Игра окончена. Попробовать ещё раз?",
+        "VICTORY": "Вы победили! Сыграть ещё раз?",
+        "RESET": "Сбросить"
+    }
+}

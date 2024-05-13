@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    @font-face {
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        src: url("../asset/font/Montserrat-Regular.ttf");
+    }
+
+    @font-face {
+        font-family: 'Open Sans';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        src: url("../asset/font/OpenSans-Regular.ttf");
+    }
+}
+

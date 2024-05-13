@@ -4,8 +4,9 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js",
+    "css-build": "tailwindcss -i ./asset/css/input.css -o ./dist/styles.css",
+    "css-watch": "tailwindcss -i ./asset/css/input.css -o ./dist/styles.css --watch"
   },
   "repository": {
     "type": "git",

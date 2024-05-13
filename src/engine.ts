@@ -6,14 +6,16 @@ import {Localization} from "./localization";
 import {Score} from "./score";
 import {Settings} from "./settings";
 import {History} from './history';
+import {GameContext, GameState, Idle} from "./game-state";
 
-export class Engine {
+export class Engine implements GameContext {
     private fruit: Fruit|null = null;
     private readonly context: CanvasRenderingContext2D;
     private readonly score: Score;
     private readonly snake: Snake;
     private inputQueue: Array<Direction> = [];
     private running: boolean = false;
+    private state: GameState;
 
     public constructor(
             canvas: HTMLCanvasElement,
@@ -30,6 +32,8 @@ export class Engine {
 
         this.snake = new Snake(this.context, Direction.right());
         this.score = new Score(score, 0);
+
+        this.state = new Idle(this);
     }
 
     public initialize(settings: Settings): void {
@@ -235,6 +239,14 @@ export class Engine {
         }
 
         this.inputQueue.push(direction);
+    }
+
+    public setState(state: GameState): void {
+        this.state = state;
+    }
+
+    getCanvasContext(): CanvasRenderingContext2D {
+        return this.context;
     }
 }
 

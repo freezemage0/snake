@@ -61,28 +61,19 @@ export class Snake {
 }
 
 class Segment {
-    private context: CanvasRenderingContext2D;
-    public position: Coordinate;
-    private readonly size: number;
-    private readonly color: string;
-
-    constructor(
-            context: CanvasRenderingContext2D,
-            position: Coordinate,
-            size: number,
-            color: string
+    public constructor(
+            private readonly context: CanvasRenderingContext2D,
+            public position: Coordinate,
+            private readonly size: number,
+            private readonly color: string
     ) {
-        this.context = context;
-        this.position = position;
-        this.size = size;
-        this.color = color;
     }
 
-    move(position: Coordinate): void {
+    public move(position: Coordinate): void {
         this.position = position;
     }
 
-    clear(): void {
+    public clear(): void {
         this.context.fillStyle = 'white';
         this.context.fillRect(
                 this.position.x + 1,
@@ -92,7 +83,7 @@ class Segment {
         );
     }
 
-    render(): void {
+    public render(): void {
         this.context.fillStyle = this.color;
         this.context.fillRect(
                 this.position.x + 1,

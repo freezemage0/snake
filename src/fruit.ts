@@ -1,10 +1,10 @@
 import {Coordinate} from "./coordinate";
 
 export class Fruit {
-    constructor(
-        private context: CanvasRenderingContext2D,
-        private position: Coordinate,
-        private color: string
+    public constructor(
+        private readonly context: CanvasRenderingContext2D,
+        private readonly position: Coordinate,
+        private readonly color: string
     ) {
     }
 

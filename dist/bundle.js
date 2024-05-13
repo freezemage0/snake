@@ -313,7 +313,49 @@ var Score = /** @class */ (function () {
 }());
 
 
+;// CONCATENATED MODULE: ./src/game-state.ts
+var Idle = /** @class */ (function () {
+    function Idle(gameContext) {
+        this.gameContext = gameContext;
+    }
+    Idle.prototype.render = function () {
+        var canvasContext = this.gameContext.getCanvasContext();
+        canvasContext.beginPath();
+        canvasContext.moveTo(0, 0);
+        canvasContext.lineTo(0, 150);
+        canvasContext.lineTo(300, 150);
+        canvasContext.lineTo(300, 0);
+        canvasContext.lineTo(0, 0);
+        canvasContext.stroke();
+    };
+    Idle.prototype.update = function () {
+    };
+    return Idle;
+}());
+
+var Running = /** @class */ (function () {
+    function Running() {
+    }
+    Running.prototype.render = function () {
+    };
+    Running.prototype.update = function () {
+    };
+    return Running;
+}());
+
+var Finish = /** @class */ (function () {
+    function Finish() {
+    }
+    Finish.prototype.render = function () {
+    };
+    Finish.prototype.update = function () {
+    };
+    return Finish;
+}());
+
+
 ;// CONCATENATED MODULE: ./src/engine.ts
+
 
 
 
@@ -334,6 +376,7 @@ var Engine = /** @class */ (function () {
         this.context = context;
         this.snake = new Snake(this.context, Direction.right());
         this.score = new Score(score, 0);
+        this.state = new Idle(this);
     }
     Engine.prototype.initialize = function (settings) {
         window.focus();
@@ -487,6 +530,12 @@ var Engine = /** @class */ (function () {
             return;
         }
         this.inputQueue.push(direction);
+    };
+    Engine.prototype.setState = function (state) {
+        this.state = state;
+    };
+    Engine.prototype.getCanvasContext = function () {
+        return this.context;
     };
     return Engine;
 }());

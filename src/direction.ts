@@ -23,7 +23,7 @@ export class Direction {
             return Direction.get(DirectionType.RIGHT);
         }
 
-        return new Direction(DirectionType.RIGHT, 15, 0);
+        return new Direction(DirectionType.RIGHT, 30, 0);
     }
 
     public static left(): Direction {
@@ -31,7 +31,7 @@ export class Direction {
             return Direction.get(DirectionType.LEFT);
         }
 
-        return new Direction(DirectionType.LEFT, -15, 0);
+        return new Direction(DirectionType.LEFT, -30, 0);
     }
 
     public static up(): Direction {
@@ -39,7 +39,7 @@ export class Direction {
             return Direction.get(DirectionType.UP);
         }
 
-        return new Direction(DirectionType.UP, 0, -15);
+        return new Direction(DirectionType.UP, 0, -30);
     }
 
     public static down(): Direction {
@@ -47,7 +47,7 @@ export class Direction {
             return Direction.get(DirectionType.DOWN);
         }
 
-        return new Direction(DirectionType.DOWN, 0, 15);
+        return new Direction(DirectionType.DOWN, 0, 30);
     }
 
     public reverse(): Direction {

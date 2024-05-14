@@ -44,9 +44,9 @@ export class Engine {
         this.snake.direction = Direction.right();
         this.snake.resetSegments();
 
-        this.snake.addSegment(this.snake.createSegment(this.settings.colors.head, 13));
+        this.snake.addSegment(this.snake.createSegment(this.settings.colors.head, 26));
         for (let i: number = 0; i < 2; i += 1) {
-            this.snake.addSegment(this.snake.createSegment(this.settings.colors.body, 13));
+            this.snake.addSegment(this.snake.createSegment(this.settings.colors.body, 26));
         }
 
         this.renderField();
@@ -115,8 +115,8 @@ export class Engine {
             let randomPosition: Coordinate;
             do {
                 randomPosition = new Coordinate(
-                        Math.max(Math.round(Math.random() * 19) * 15, 15),
-                        Math.max(Math.round(Math.random() * 9) * 15, 15),
+                        Math.max(Math.round(Math.random() * 19) * 30, 30),
+                        Math.max(Math.round(Math.random() * 9) * 30, 30),
                 );
             } while (this.snake.segments.some((segment) => randomPosition.equals(segment.position)));
 
@@ -125,7 +125,7 @@ export class Engine {
         }
 
         if (this.snake.segments.some((segment): boolean => !!this.fruit?.collidesWith(segment.position))) {
-            this.snake.addSegment(this.snake.createSegment(this.settings.colors.body, 13));
+            this.snake.addSegment(this.snake.createSegment(this.settings.colors.body, 26));
             this.score.increment();
 
             this.fruit = null;
@@ -155,13 +155,13 @@ export class Engine {
 
         this.context.beginPath();
 
-        for (let x: number = Boundary.LOWEST_HORIZONTAL; x <= Boundary.HIGHEST_HORIZONTAL; x += 15) {
+        for (let x: number = Boundary.LOWEST_HORIZONTAL; x <= Boundary.HIGHEST_HORIZONTAL; x += 30) {
             this.context.moveTo(x, Boundary.LOWEST_VERTICAL);
             this.context.lineTo(x, Boundary.HIGHEST_VERTICAL);
             this.context.stroke();
         }
 
-        for (let y: number = Boundary.LOWEST_VERTICAL; y <= Boundary.HIGHEST_VERTICAL; y += 15) {
+        for (let y: number = Boundary.LOWEST_VERTICAL; y <= Boundary.HIGHEST_VERTICAL; y += 30) {
             this.context.moveTo(Boundary.LOWEST_HORIZONTAL, y);
             this.context.lineTo(Boundary.HIGHEST_HORIZONTAL, y);
             this.context.stroke();
@@ -241,8 +241,8 @@ export class Engine {
 enum Boundary {
     LOWEST_VERTICAL = 0,
     LOWEST_HORIZONTAL = 0,
-    HIGHEST_VERTICAL = 150,
-    HIGHEST_HORIZONTAL = 300
+    HIGHEST_VERTICAL = 300,
+    HIGHEST_HORIZONTAL = 600
 }
 
 class KeyboardControlMap {

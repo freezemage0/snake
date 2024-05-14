@@ -43,7 +43,7 @@ export class Snake {
         if (this.lastSegment) {
             position = this.lastSegment.position.move(this.direction.reverse());
         } else {
-            position = new Coordinate(300 / 2, 150 / 2);
+            position = new Coordinate(600 / 2, 300 / 2);
         }
 
         return new Segment(this.context, position, size, color);
@@ -85,8 +85,8 @@ class Segment {
     clear(): void {
         this.context.fillStyle = 'white';
         this.context.fillRect(
-                this.position.x + 1,
-                this.position.y + 1,
+                this.position.x + 2,
+                this.position.y + 2,
                 this.size,
                 this.size
         );
@@ -95,8 +95,8 @@ class Segment {
     render(): void {
         this.context.fillStyle = this.color;
         this.context.fillRect(
-                this.position.x + 1,
-                this.position.y + 1,
+                this.position.x + 2,
+                this.position.y + 2,
                 this.size,
                 this.size
         );

@@ -11,10 +11,10 @@ export class Fruit {
     public render(): void {
         this.context.fillStyle = this.color;
         this.context.fillRect(
-                this.position.x + 1,
-                this.position.y + 1,
-                13,
-                13
+                this.position.x + 2,
+                this.position.y + 2,
+                26,
+                26
         );
     }
     public collidesWith(position: Coordinate): boolean {

@@ -163,7 +163,7 @@ var Snake = /** @class */ (function () {
             position = this.lastSegment.position.move(this.direction.reverse());
         }
         else {
-            position = new Coordinate(300 / 2, 150 / 2);
+            position = new Coordinate(600 / 2, 300 / 2);
         }
         return new Segment(this.context, position, size, color);
     };
@@ -190,11 +190,11 @@ var Segment = /** @class */ (function () {
     };
     Segment.prototype.clear = function () {
         this.context.fillStyle = 'white';
-        this.context.fillRect(this.position.x + 1, this.position.y + 1, this.size, this.size);
+        this.context.fillRect(this.position.x + 2, this.position.y + 2, this.size, this.size);
     };
     Segment.prototype.render = function () {
         this.context.fillStyle = this.color;
-        this.context.fillRect(this.position.x + 1, this.position.y + 1, this.size, this.size);
+        this.context.fillRect(this.position.x + 2, this.position.y + 2, this.size, this.size);
     };
     return Segment;
 }());
@@ -218,25 +218,25 @@ var Direction = /** @class */ (function () {
         if (Direction.cache.has(DirectionType.RIGHT)) {
             return Direction.get(DirectionType.RIGHT);
         }
-        return new Direction(DirectionType.RIGHT, 15, 0);
+        return new Direction(DirectionType.RIGHT, 30, 0);
     };
     Direction.left = function () {
         if (Direction.cache.has(DirectionType.LEFT)) {
             return Direction.get(DirectionType.LEFT);
         }
-        return new Direction(DirectionType.LEFT, -15, 0);
+        return new Direction(DirectionType.LEFT, -30, 0);
     };
     Direction.up = function () {
         if (Direction.cache.has(DirectionType.UP)) {
             return Direction.get(DirectionType.UP);
         }
-        return new Direction(DirectionType.UP, 0, -15);
+        return new Direction(DirectionType.UP, 0, -30);
     };
     Direction.down = function () {
         if (Direction.cache.has(DirectionType.DOWN)) {
             return Direction.get(DirectionType.DOWN);
         }
-        return new Direction(DirectionType.DOWN, 0, 15);
+        return new Direction(DirectionType.DOWN, 0, 30);
     };
     Direction.prototype.reverse = function () {
         if (!Direction.reverseMap) {
@@ -280,7 +280,7 @@ var Fruit = /** @class */ (function () {
     }
     Fruit.prototype.render = function () {
         this.context.fillStyle = this.color;
-        this.context.fillRect(this.position.x + 1, this.position.y + 1, 13, 13);
+        this.context.fillRect(this.position.x + 2, this.position.y + 2, 26, 26);
     };
     Fruit.prototype.collidesWith = function (position) {
         return this.position.equals(position);
@@ -343,9 +343,9 @@ var Engine = /** @class */ (function () {
         this.score.reset();
         this.snake.direction = Direction.right();
         this.snake.resetSegments();
-        this.snake.addSegment(this.snake.createSegment(this.settings.colors.head, 13));
+        this.snake.addSegment(this.snake.createSegment(this.settings.colors.head, 26));
         for (var i = 0; i < 2; i += 1) {
-            this.snake.addSegment(this.snake.createSegment(this.settings.colors.body, 13));
+            this.snake.addSegment(this.snake.createSegment(this.settings.colors.body, 26));
         }
         this.renderField();
     };
@@ -396,13 +396,13 @@ var Engine = /** @class */ (function () {
         if (!this.fruit) {
             var randomPosition_1;
             do {
-                randomPosition_1 = new Coordinate(Math.max(Math.round(Math.random() * 19) * 15, 15), Math.max(Math.round(Math.random() * 9) * 15, 15));
+                randomPosition_1 = new Coordinate(Math.max(Math.round(Math.random() * 19) * 30, 30), Math.max(Math.round(Math.random() * 9) * 30, 30));
             } while (this.snake.segments.some(function (segment) { return randomPosition_1.equals(segment.position); }));
             this.fruit = new Fruit(this.context, randomPosition_1, this.settings.colors.fruit);
             this.fruit.render();
         }
         if (this.snake.segments.some(function (segment) { var _a; return !!((_a = _this.fruit) === null || _a === void 0 ? void 0 : _a.collidesWith(segment.position)); })) {
-            this.snake.addSegment(this.snake.createSegment(this.settings.colors.body, 13));
+            this.snake.addSegment(this.snake.createSegment(this.settings.colors.body, 26));
             this.score.increment();
             this.fruit = null;
         }
@@ -424,12 +424,12 @@ var Engine = /** @class */ (function () {
     Engine.prototype.renderField = function () {
         this.context.strokeStyle = this.settings.colors.border;
         this.context.beginPath();
-        for (var x = Boundary.LOWEST_HORIZONTAL; x <= Boundary.HIGHEST_HORIZONTAL; x += 15) {
+        for (var x = Boundary.LOWEST_HORIZONTAL; x <= Boundary.HIGHEST_HORIZONTAL; x += 30) {
             this.context.moveTo(x, Boundary.LOWEST_VERTICAL);
             this.context.lineTo(x, Boundary.HIGHEST_VERTICAL);
             this.context.stroke();
         }
-        for (var y = Boundary.LOWEST_VERTICAL; y <= Boundary.HIGHEST_VERTICAL; y += 15) {
+        for (var y = Boundary.LOWEST_VERTICAL; y <= Boundary.HIGHEST_VERTICAL; y += 30) {
             this.context.moveTo(Boundary.LOWEST_HORIZONTAL, y);
             this.context.lineTo(Boundary.HIGHEST_HORIZONTAL, y);
             this.context.stroke();
@@ -495,8 +495,8 @@ var Boundary;
 (function (Boundary) {
     Boundary[Boundary["LOWEST_VERTICAL"] = 0] = "LOWEST_VERTICAL";
     Boundary[Boundary["LOWEST_HORIZONTAL"] = 0] = "LOWEST_HORIZONTAL";
-    Boundary[Boundary["HIGHEST_VERTICAL"] = 150] = "HIGHEST_VERTICAL";
-    Boundary[Boundary["HIGHEST_HORIZONTAL"] = 300] = "HIGHEST_HORIZONTAL";
+    Boundary[Boundary["HIGHEST_VERTICAL"] = 300] = "HIGHEST_VERTICAL";
+    Boundary[Boundary["HIGHEST_HORIZONTAL"] = 600] = "HIGHEST_HORIZONTAL";
 })(Boundary || (Boundary = {}));
 var KeyboardControlMap = /** @class */ (function () {
     function KeyboardControlMap() {

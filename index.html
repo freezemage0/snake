@@ -81,46 +81,5 @@
             </div>
         </div>
         <script src="dist/bundle.js"></script>
-        <script type="text/javascript">
-            /**
-             * @namespace Freezemage
-             */
-            const localization = new Freezemage.Localization();
-            localization.initialize('[data-localized]').then(() => {
-                const container = document.querySelector('.container');
-                container.classList.remove('hidden');
-                container.classList.add('flex');
-            });
-
-            const form = document.forms.namedItem('settings');
-
-            const history = new Freezemage.History(
-                    document.querySelector('[data-role="score-board"]'),
-                    localization
-            );
-            history.render();
-
-            const engine = new Freezemage.Engine(
-                    document.getElementById('application'),
-                    document.querySelector('[data-role="score-counter"]'),
-                    localization,
-                    Freezemage.Settings.createFromNode(form),
-                    history
-            );
-
-            document.getElementById('start').onclick = (event) => {
-                event.preventDefault();
-
-                engine.stop();
-                engine.initialize(Freezemage.Settings.createFromNode(form));
-                engine.run();
-            }
-
-            document.getElementById('reset').onclick = (event) => {
-                event.preventDefault();
-
-                history.reset();
-            }
-        </script>
     </body>
 </html>

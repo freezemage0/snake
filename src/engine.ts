@@ -169,6 +169,8 @@ export class Engine {
     }
 
     private finalizeSession(message: string): void {
+        this.stop();
+
         const retry = confirm(message);
 
         this.history.register(new Date(), this.score.getValue());

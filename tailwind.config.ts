@@ -1,10 +1,11 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from 'tailwindcss'
+
+export default {
   content: ['./index.html', './src/history.ts'],
-  theme: {
+          theme: {
     container: {
       padding: '2rem',
-      center: true
+              center: true
     },
     fontFamily: {
       'body': ['Open Sans']
@@ -12,5 +13,5 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-}
+} satisfies Config
 

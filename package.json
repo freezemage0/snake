@@ -4,7 +4,7 @@
     "description": "",
     "main": "src/index.ts",
     "scripts": {
-        "webpack-build": "webpack --config webpack.config.js",
+        "webpack-build": "webpack --config webpack.config.ts",
         "tailwind-build": "tailwindcss -i ./asset/css/snake.css -o ./dist/styles.css"
     },
     "repository": {

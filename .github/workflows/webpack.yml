@@ -26,7 +26,7 @@ jobs:
                     npm install
                     npx webpack --config webpack.config.js
                     npx tailwindcss -i ./asset/css/snake.css -o ./dist/styles.css
-                    zip snake.zip dist/bundle.js dist/styles.css index.html
+                    zip snake.zip dist/bundle.js dist/styles.css index.html asset/font/OpenSans-Regular.ttf
 
             -   name: Release
                 uses: softprops/action-gh-release@v2

@@ -53,6 +53,10 @@ export class Engine {
     }
 
     public run(): void {
+        if (this.running) {
+            return;
+        }
+
         this.running = true;
 
         window.addEventListener('keydown', this.update.bind(this));

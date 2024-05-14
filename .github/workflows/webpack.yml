@@ -1,29 +1,36 @@
 name: NodeJS with Webpack
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    push:
+        branches: [ "master" ]
+        tags:
+            - "v*"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
+        strategy:
+            matrix:
+                node-version: [ 18.x ]
 
-    steps:
-    - uses: actions/checkout@v4
+        steps:
+            -   uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
+            -   name: Use Node.js ${{ matrix.node-version }}
+                uses: actions/setup-node@v3
+                with:
+                    node-version: ${{ matrix.node-version }}
 
-    - name: Build
-      run: |
-        npm install
-        npx webpack --config webpack.config.js
-        
+            -   name: Build webpack & tailwind
+                run: |
+                    npm install
+                    npx webpack --config webpack.config.js
+                    npx tailwindcss -i ./asset/css/snake.css -o ./dist/styles.css
+
+            -   name: Release
+                uses: softprops/action-gh-release@v2
+                with:
+                    files: |
+                        ./dist/**
+                        index.html

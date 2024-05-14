@@ -178,6 +178,7 @@ export class Engine {
         }
 
         this.initialize(this.settings);
+        this.run();
     }
 
     private updateController(): void {

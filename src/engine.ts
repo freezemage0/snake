@@ -14,6 +14,7 @@ export class Engine {
     private readonly snake: Snake;
     private inputQueue: Array<Direction> = [];
     private running: boolean = false;
+    private timeoutId: number | undefined = undefined;
 
     public constructor(
             canvas: HTMLCanvasElement,
@@ -61,12 +62,13 @@ export class Engine {
 
         window.addEventListener('keydown', this.update.bind(this));
         window.requestAnimationFrame(this.updateController.bind(this));
-        window.requestAnimationFrame(window.setTimeout.bind(window, this.tick.bind(this), 1000 / this.settings.speed));
+        window.requestAnimationFrame(this.tick.bind(this));
     }
 
     public stop(): void {
         this.running = false;
 
+        window.clearTimeout(this.timeoutId);
         window.removeEventListener('keydown', this.update.bind(this));
     }
 
@@ -86,56 +88,54 @@ export class Engine {
     }
 
     private tick(): void {
-        if (!this.running) {
-            return;
-        }
-
-        if (this.inputQueue.length > 0) {
-            const direction = this.inputQueue.shift();
-            if (direction) {
-                this.snake.direction = direction;
+        this.timeoutId = window.setTimeout(() => {
+            if (this.inputQueue.length > 0) {
+                const direction = this.inputQueue.shift();
+                if (direction) {
+                    this.snake.direction = direction;
+                }
             }
-        }
 
-        this.snake.update();
+            this.snake.update();
 
-        if (this.checkCollision()) {
-            this.finalizeSession(this.localization.getMessage('GAME_OVER'));
+            if (this.checkCollision()) {
+                this.finalizeSession(this.localization.getMessage('GAME_OVER'));
+                this.snake.render();
+
+                return;
+            }
+
+            if (this.snake.segments.length == 200) {
+                this.finalizeSession(this.localization.getMessage('VICTORY'));
+                this.snake.render();
+
+                return;
+            }
+
             this.snake.render();
 
-            return;
-        }
+            if (!this.fruit) {
+                let randomPosition: Coordinate;
+                do {
+                    randomPosition = new Coordinate(
+                            Math.max(Math.round(Math.random() * 19) * 30, 30),
+                            Math.max(Math.round(Math.random() * 9) * 30, 30),
+                    );
+                } while (this.snake.segments.some((segment) => randomPosition.equals(segment.position)));
 
-        if (this.snake.segments.length == 200) {
-            this.finalizeSession(this.localization.getMessage('VICTORY'));
-            this.snake.render();
+                this.fruit = new Fruit(this.context, randomPosition, this.settings.colors.fruit);
+                this.fruit.render();
+            }
 
-            return;
-        }
+            if (this.snake.segments.some((segment): boolean => !!this.fruit?.collidesWith(segment.position))) {
+                this.snake.addSegment(this.snake.createSegment(this.settings.colors.body, 26));
+                this.score.increment();
 
-        this.snake.render();
+                this.fruit = null;
+            }
 
-        if (!this.fruit) {
-            let randomPosition: Coordinate;
-            do {
-                randomPosition = new Coordinate(
-                        Math.max(Math.round(Math.random() * 19) * 30, 30),
-                        Math.max(Math.round(Math.random() * 9) * 30, 30),
-                );
-            } while (this.snake.segments.some((segment) => randomPosition.equals(segment.position)));
-
-            this.fruit = new Fruit(this.context, randomPosition, this.settings.colors.fruit);
-            this.fruit.render();
-        }
-
-        if (this.snake.segments.some((segment): boolean => !!this.fruit?.collidesWith(segment.position))) {
-            this.snake.addSegment(this.snake.createSegment(this.settings.colors.body, 26));
-            this.score.increment();
-
-            this.fruit = null;
-        }
-
-        window.requestAnimationFrame(window.setTimeout.bind(window, this.tick.bind(this), 1000 / this.settings.speed));
+            window.requestAnimationFrame(this.tick.bind(this));
+        }, 1000 / this.settings.speed);
     }
 
     private checkCollision(): boolean {
